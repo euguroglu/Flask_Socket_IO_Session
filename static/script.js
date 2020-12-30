@@ -16,4 +16,14 @@
      alert(msg);
    });
 
+   $('#join_room').on('click',function() {
+     var room = $('#room_to_join').val();
+
+     private_socket.emit('join_room',room);
+   });
+
+   private_socket.on('room_message',function(msg){
+     alert(msg);
+   });
+
 });
