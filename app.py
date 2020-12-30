@@ -7,7 +7,7 @@ app.config['DEBUG'] = True
 
 socketio = SocketIO(app)
 
-users = []
+users = {}
 
 @app.route('/')
 def index():
@@ -15,9 +15,15 @@ def index():
 
 @socketio.on('username',namespace='/private')
 def receive_username(username):
-    users.append({username:request.sid})
-    print(users)
+    users[username] = request.sid
+    print('Username added')
 
+@socketio.on('private_message',namespace='/private')
+def private_message(payload):
+    recipient_session_id = users[payload['username']]
+    message = payload['message']
+
+    emit('new_private_message',message,room=recipient_session_id)
 
 if __name__ == "__main__":
     socketio.run(app)
