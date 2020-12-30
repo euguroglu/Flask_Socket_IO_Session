@@ -26,4 +26,10 @@
      alert(msg);
    });
 
+   $('#leave_room').on('click',function(){
+     var room = $('#room_to_join').val();
+
+     private_socket.emit('leave_the_room',room);
+   });
+
 });

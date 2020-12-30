@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from flask_socketio import SocketIO, send, emit, join_room
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
@@ -29,6 +29,11 @@ def private_message(payload):
 def handle_join_room(room):
     join_room(room)
     emit('room_message','a new user has joined',room=room)
+
+@socketio.on('leave_the_room',namespace='/private')
+def handle_leave_room(room):
+    leave_room(room)
+    emit('room_message','a user has lefted to room',room=room)
 
 if __name__ == "__main__":
     socketio.run(app)
